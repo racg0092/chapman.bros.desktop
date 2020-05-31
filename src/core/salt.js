@@ -76,6 +76,8 @@ const decrypt = (keyRing, sequence) => {
     }
     return newKeyRing;
 }
+// TODO make the numbers in the equation a value saved into the users computer
+// for security measures.
 const equation = (value, direction) => {
     if(direction === 'encrypt') {
         return ((value + 20) - 5) * 2; 

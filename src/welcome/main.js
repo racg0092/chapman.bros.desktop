@@ -38,6 +38,7 @@ ipc.on('sign-in', (event, credentials) => {
       const inputPassword = crypto.createHash('sha256').update(credentials.password + salt).digest('hex');
       if(inputPassword === userEncryption.password) {
         const doc = await collection.findOne(query, {projection: {password:0, salt:0}});
+        server.close();
         global.sharedObject = { user: doc };
         welcomeWindow.webContents.send('login-result', 'Succesfully logged in')
         createMainWindow();
@@ -65,7 +66,14 @@ ipc.on('sign-up', (event, profile) => {
     const database = server.db('Profile');
     const collection = database.collection('Universal');
     const result = await collection.insertOne(profile);
-    server.close(); 
+    server.close();
+    profile.password = null;
+    profile.salt = null;
+    global.sharedObject = {
+      user: profile
+    }
+    createMainWindow();
+    welcomeWindow.close();
   })()
 })
 
