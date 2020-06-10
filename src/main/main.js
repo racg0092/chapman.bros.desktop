@@ -12,6 +12,7 @@ const createMainWindow = () => {
         width: 1000,
     });
     mainWindow.loadFile(path.join(__dirname, '../gui/main/index.html'));
+    console.log(global.sharedObject.user);
 }
 
 

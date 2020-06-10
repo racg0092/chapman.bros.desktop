@@ -4,7 +4,12 @@ const { dialog } = require('electron');
 class Server {
 
     constructor(username, password) {
-        this.uri = `mongodb+srv://${username}:${password}@questuniversal-ukowr.mongodb.net/test?retryWrites=true&w=majority`
+        const devAtlas = `mongodb+srv://${username}:${password}@questuniversal-ukowr.mongodb.net/test?retryWrites=true&w=majority`;
+        const local = `mongodb://universal-rw:local-access@localhost:28011/?authSource=admin&replicaSet=quest-repl&readPreference=primary`;
+        const connection = false ?
+            devAtlas :
+            local;
+        this.uri = connection
         this.server = new MongoClient(this.uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true

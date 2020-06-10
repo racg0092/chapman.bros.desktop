@@ -65,15 +65,21 @@ ipc.on('sign-up', (event, profile) => {
     const server = await new Server('ragc0092', 'lucky.number.Slevin').connect();
     const database = server.db('Profile');
     const collection = database.collection('Universal');
-    const result = await collection.insertOne(profile);
-    server.close();
-    profile.password = null;
-    profile.salt = null;
-    global.sharedObject = {
-      user: profile
+    // TODO need to accaount for error
+    const readprofile = collection.findOne({username:profile.username});
+    if(readprofile === null) {
+      const result = await collection.incsertOne(profile);
+      profile.password = null;
+      profile.salt = null;
+      global.sharedObject = {
+        user: profile
+      }
+      createMainWindow();
+      welcomeWindow.close();
+    } else {
+      console.log('username already exist');
     }
-    createMainWindow();
-    welcomeWindow.close();
+    server.close();
   })()
 })
 
